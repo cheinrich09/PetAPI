@@ -5,8 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.amazonaws.auth.AWSCredentialsProvider;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
@@ -19,15 +18,12 @@ import model.dynamo.PetItem;
 
 public class DynamoDBClient {
 
-    private static final String ACCESS_KEY = "AKIAUIJSBVSHDJ73TBDD";
-    private static final String SECRET_KEY = "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";
     private static final String TABLE_NAME = "Pets";
     private DynamoDBMapper mapper;
     
     public DynamoDBClient() {
-        BasicAWSCredentials awsCreds = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
-        AWSCredentialsProvider credentials = new AWSStaticCredentialsProvider(awsCreds);
-        AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
+        final AWSCredentialsProvider credentials = new DefaultAWSCredentialsProviderChain();
+        final AmazonDynamoDB client = AmazonDynamoDBClientBuilder.standard()
                 .withRegion(Regions.US_EAST_2)
                 .withCredentials(credentials)
                 .build();
